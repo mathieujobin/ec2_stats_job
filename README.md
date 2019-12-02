@@ -1,8 +1,13 @@
 # Ec2StatsJob
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/ec2_stats_job`. To experiment with that code, run `bin/console` for an interactive prompt.
+We had this cron job that was updating a couple of ec2 tags with boot info.
+I made a version where I was adding some server stats to be available straight from the AWS console.
 
-TODO: Delete this and the text above, and describe your gem
+Of course, I was a bit afraid of the performance hit this could cause. but it turns out, it did not cause any, and I really love this feature.
+
+That script was pushed via chef unto multiple project, which we are now moving away from. And I wanted an easy way to share it among projects without relying on custom deployment scripts.
+
+Making it an ActiveJob was the easiest.
 
 ## Installation
 
@@ -22,7 +27,21 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+linux_user_name = 'rails'
+Ec2StatsJob::Job.perform_later(linux_user_name)
+```
+
+if you are using [Sidekiq::Cron](https://github.com/ondrejbartas/sidekiq-cron), you can do in your favorite initializer
+
+```ruby
+  Sidekiq::Cron::Job.create(
+    name: 'EC2 Server Stats update - every 5min',
+    cron: '*/5 * * * *',
+    class: 'Ec2StatsJob::Job',
+    args: ['webapp']
+  )
+```
 
 ## Development
 
