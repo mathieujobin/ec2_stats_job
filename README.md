@@ -36,8 +36,8 @@ if you are using [Sidekiq::Cron](https://github.com/ondrejbartas/sidekiq-cron), 
 
 ```ruby
   Sidekiq::Cron::Job.create(
-    name: 'EC2 Server Stats update - every 5min',
-    cron: '*/5 * * * *',
+    name: 'EC2 Server Stats update - every 2min',
+    cron: '*/2 * * * *',
     class: 'Ec2StatsJob::Job',
     args: ['webapp']
   )
