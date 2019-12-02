@@ -1,8 +1,14 @@
 require "ec2_stats_job/version"
 
-require 'aws-sdk'
+begin
+  require 'aws-sdk-ec2' # v3 +
+rescue LoadError
+  require 'aws-sdk-v1' # v1
+end
+
 require 'json'
 require 'yaml'
+require 'active_job'
 
 # Silently fail if ohai gem is unavailable or we are not on ec2
 # begin
@@ -56,13 +62,14 @@ module Ec2StatsJob
 
     def ec2_instance
       @ec2_instance ||= begin
-      if defined?(AWS::VERSION) && BigDecimal(AWS::VERSION.split('.')[0..1].join('.')) < 2
-        AWS::EC2.new.regions[region].instances[instance_id]
-      elsif defined?(Aws::CORE_GEM_VERSION) && BigDecimal(Aws::CORE_GEM_VERSION.split('.')[0..1].join('.')) > 3
-        ENV['AWS_REGION'] = region
-        Aws::EC2::Instance.new(id: instance_id)
-      else
-        raise Error, "unsupported aws-sdk version number. please open an issue with your version"
+        if defined?(AWS::VERSION) && BigDecimal(AWS::VERSION.split('.')[0..1].join('.')) < 2
+          AWS::EC2.new.regions[region].instances[instance_id]
+        elsif defined?(Aws::CORE_GEM_VERSION) && BigDecimal(Aws::CORE_GEM_VERSION.split('.')[0..1].join('.')) > 3
+          ENV['AWS_REGION'] = region
+          Aws::EC2::Instance.new(id: instance_id)
+        else
+          raise Error, "unsupported aws-sdk version number. please open an issue with your version"
+        end
       end
     end
 

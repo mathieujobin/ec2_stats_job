@@ -4,6 +4,7 @@ RSpec.describe Ec2StatsJob do
   end
 
   it "does something useful" do
-    expect(false).to eq(true)
+    expect(defined?(Ec2StatsJob::Job)).to eq('constant')
+    expect(defined?(Ec2StatsJob::Client)).to eq('constant')
   end
 end
