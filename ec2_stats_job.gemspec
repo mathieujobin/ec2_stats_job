@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Mathieu Jobin"]
   spec.email         = ["mathieu@justbudget.com"]
 
-  spec.summary       = %q{TODO: Write a short summary, because RubyGems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = %q{Background job that updates AWS EC2 tags with information from uptime/ps/etc}
+  spec.description   = spec.summary
+  spec.homepage      = "https://github.com/mathieujobin/ec2_stats_job"
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
